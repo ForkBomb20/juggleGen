@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>juggleGen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-bottom: 2px solid #ddd;
+            text-align: center;
+        }
+
+        .pattern-name {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-width: 600px;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted for smaller frames */
+            gap: 20px; /* Space between items */
+            padding: 20px;
+        }
+
+        .graph-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .graph-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 250px; /* Slightly smaller height for compactness */
+            border: none;
+        }
+
+        form {
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: center;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #f0f0f0;
+            border-top: 2px solid #ddd;
+        }
+
+        .error-message {
+            color: red;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .success-message {
+            color: black;
+            margin: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>juggleGen</h1>
+        <h3>Generate juggling passing patterns</h3>
+    </div> 
+
+    <form method="POST" action="/">
+        <label for="players">Number of Players:</label>
+        <input type="number" id="players" name="players" min="1" required>
+
+        <label for="beats">Number of Beats:</label>
+        <input type="number" id="beats" name="beats" min="1" required>
+
+        <button type="submit">Generate</button>
+    </form>
+
+    <!-- Display the pattern name -->
+    {% if pattern_name %}
+    <div class="pattern-name">
+        <p>{{ pattern_name }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Display error messages, if any -->
+    {% if error %}
+    <div class="error-message">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Display generated pattern, if any -->
+    {% if table_html %}
+    <div class="success-message">
+        <p>{{ table_html | safe }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Display the graph images -->
+    {% if graphs %}
+    <div>
+        <h3>Graph Visualizations:</h3>
+        <div class="grid-container">
+            {% for graph, beat_number in graphs %}
+            <div class="graph-container">
+                <div class="graph-label">Beat {{ beat_number }}</div>
+                <iframe srcdoc="{{ graph }}"></iframe>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <p><b>Website by</b>: Nathan Kawamoto</p>
+    </div>
+</body>
+</html>
